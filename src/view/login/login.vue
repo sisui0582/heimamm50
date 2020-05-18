@@ -38,21 +38,27 @@
           <el-button style="width:100%" type="primary" @click="loginClick">登录</el-button>
         </el-form-item>
         <el-form-item>
-          <el-button style="width:100%" type="primary">注册</el-button>
+          <el-button style="width:100%" type="primary" @click="register">注册</el-button>
         </el-form-item>
       </el-form>
     </div>
     <div class="right">
       <img src="@/assets/imgs/login_bg.png" alt />
     </div>
+    <register ref="register"></register>
   </div>
 </template>
 
 <script>
+//导入子组件
+import register from "./register";
 //按需导入
-import {setToken} from '@/utils/token.js';
+import { setToken } from "@/utils/token.js";
 export default {
   name: "login",
+  components: {
+    register
+  },
   data() {
     return {
       codeURL: process.env.VUE_APP_BASEURL + "/captcha?type=login",
@@ -112,9 +118,9 @@ export default {
         "/captcha?type=login&t=" +
         (new Date() - 0);
     },
-     // 登录
+    // 登录
     loginClick() {
-      this.$refs.loginFormRef.validate(async (valid) => {
+      this.$refs.loginFormRef.validate(async valid => {
         if (!valid) return;
         // 发请求给后台进行登录
         // this.$axios.post("/login", this.loginForm).then((res) => {
@@ -132,27 +138,31 @@ export default {
         //   }
         // });
         const res = await this.$axios.post("/login", this.loginForm);
-         if (res.data.code === 200) {
-           //提示
-            this.$message({
-              message: '登录成功~',
-              type: "success",
-            });
+        if (res.data.code === 200) {
+          //提示
+          this.$message({
+            message: "登录成功~",
+            type: "success"
+          });
 
-            //保存
-            setToken(res.data.data.token);
+          //保存
+          setToken(res.data.data.token);
 
-            //跳转页面
-            this.$router.push("/layout")
-          } else {
-            this.$message.error(res.data.message);
-            this.codeURL =
-              process.env.VUE_APP_BASEURL +
-              "/captcha?type=login&t=" +
-              (new Date() - 0);
-          }
+          //跳转页面
+          this.$router.push("/layout");
+        } else {
+          this.$message.error(res.data.message);
+          this.codeURL =
+            process.env.VUE_APP_BASEURL +
+            "/captcha?type=login&t=" +
+            (new Date() - 0);
+        }
       });
-    }, 
+    },
+    //注册
+    register(){
+      this.$refs.register.dialogVisible = true
+    }
   }
 };
 </script>
