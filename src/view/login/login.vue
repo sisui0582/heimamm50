@@ -138,6 +138,8 @@ export default {
         //   }
         // });
         const res = await this.$axios.post("/login", this.loginForm);
+        console.log(res);
+        
         if (res.data.code === 200) {
           //提示
           this.$message({
