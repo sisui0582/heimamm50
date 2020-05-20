@@ -238,6 +238,9 @@ export default {
     width: 100%;
     height: 40px;
   }
+  .avatar-uploader {
+    text-align: center;
+  }
   .avatar-uploader .el-upload {
     border: 1px dashed #d9d9d9;
     border-radius: 6px;

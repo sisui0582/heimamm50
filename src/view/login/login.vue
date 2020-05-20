@@ -160,8 +160,8 @@ export default {
       });
     },
     //注册
-    register(){
-      this.$refs.register.dialogVisible = true
+    register() {
+      this.$refs.register.dialogVisible = true;
     }
   }
 };
