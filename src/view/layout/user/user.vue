@@ -40,7 +40,7 @@
         </el-table-column>
         <el-table-column label="操作" width="280">
           <template slot-scope="scope">
-            <el-button type="primary">编辑</el-button>
+            <el-button @click="editUser(scope.row)" type="primary">编辑</el-button>
             <el-button
               @click="changeStatus(scope.row.id)"
               :type="scope.row.status === 0 ? 'success' : 'info'"
@@ -54,7 +54,7 @@
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page="page"
-          :page-sizes="[2, 3, 5, 10]"
+          :page-sizes="[1, 2, 3, 5, 10]"
           :page-size="limit"
           layout="total, sizes, prev, pager, next, jumper"
           :total="total"
@@ -114,11 +114,13 @@ export default {
         this.total = res.data.data.pagination.total;
       }
     },
+    // 分页条的页容量发生了改变
     handleSizeChange(val) {
       //console.log(`每页 ${val} 条`);
       this.limit = val;
       this.search();
     },
+     // 分页条的当前页发生了改变
     handleCurrentChange(val) {
       //console.log(`当前页: ${val}`);
       this.page = val;
@@ -158,9 +160,36 @@ export default {
         .catch(() => {});
     },
     add() {
+      //重置addForm
+      this.$refs.userEditRef.addForm = {
+        username: "", //用户名
+        email: "", //邮箱
+        phone: "", //手机号
+        role_id: "", //角色
+        status: "", //状态
+        remark: "" //备注
+      };
+      //清楚校验规则
+      this.$nextTick(() =>{
+        //dialog中的form表单渲染完毕后,会自动执行改回调函数
+        this.$refs.userEditRef.$refs.addFormRef.clearValidate()
+      })
       // 让新增用户的对话框显示出来
       this.$refs.userEditRef.dialogVisible = true;
       this.$refs.userEditRef.mode = "add";
+    },
+    //编辑用户
+    editUser(row){
+      // 让新增用户的对话框显示出来
+      this.$refs.userEditRef.dialogVisible = true;
+      this.$refs.userEditRef.mode = "edit";
+      // this.$refs.userEditRef.addForm = JSON.parse(JSON.stringify(row))
+      this.$refs.userEditRef.addForm = {...row}
+      //清楚校验规则
+      this.$nextTick(() =>{
+        //dialog中的form表单渲染完毕后,会自动执行改回调函数
+        this.$refs.userEditRef.$refs.addFormRef.clearValidate()
+      })
     }
   }
 };

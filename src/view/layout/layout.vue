@@ -14,7 +14,7 @@
     </el-header>
     <el-container>
       <el-aside width="auto">
-        <el-menu router default-active="3" class="el-menu-vertical-demo" :collapse="isCollapse">
+        <el-menu router :default-active="defaultActive" class="el-menu-vertical-demo" :collapse="isCollapse">
           <el-menu-item index="/layout/chart">
             <i class="el-icon-pie-chart"></i>
             <span slot="title">数据预览</span>
@@ -47,14 +47,17 @@
 <script>
 import { removeToken } from "@/utils/token";
 export default {
+  name:'layout',
   data() {
     return {
       isCollapse: false, // 是否收起折叠菜单
       username: "", //用户名称
-      avatar: "" //用户头像
+      avatar: "", //用户头像
+      defaultActive:"" //菜单是否选中
     };
   },
   created() {
+    this.defaultActive = this.$router.fullPath;
     this.getUserInfoData();
   },
   methods: {

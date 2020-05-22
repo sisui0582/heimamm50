@@ -1,51 +1,53 @@
 <template>
-  <div class="login-container">
-    <div class="left">
-      <div class="title-box">
-        <img src="@/assets/imgs/login_icon.png" alt />
-        <span class="title">黑马面面</span>
-        <span class="line"></span>
-        <span class="sub-title">用户登录</span>
+  <div class="box">
+    <div class="login-container">
+      <div class="left">
+        <div class="title-box">
+          <img src="@/assets/imgs/login_icon.png" alt />
+          <span class="title">黑马面面</span>
+          <span class="line"></span>
+          <span class="sub-title">用户登录</span>
+        </div>
+        <el-form class="login-form" :model="loginForm" :rules="rules" ref="loginFormRef">
+          <el-form-item prop="phone">
+            <el-input prefix-icon="el-icon-user" placeholder="请输入手机号" v-model="loginForm.phone"></el-input>
+          </el-form-item>
+          <el-form-item prop="password">
+            <el-input
+              prefix-icon="el-icon-lock"
+              placeholder="请输入密码"
+              show-password
+              v-model="loginForm.password"
+            ></el-input>
+          </el-form-item>
+          <el-form-item prop="code">
+            <el-row :gutter="18">
+              <el-col :span="16">
+                <el-input prefix-icon="el-icon-key" placeholder="请输验证码" v-model="loginForm.code"></el-input>
+              </el-col>
+              <el-col :span="8">
+                <img class="captcha" :src="codeURL" @click="getCode" />
+              </el-col>
+            </el-row>
+          </el-form-item>
+          <el-form-item prop="isCheck">
+            <el-checkbox v-model="loginForm.isCheck"></el-checkbox>我已阅读并同意
+            <el-link type="primary">用户协议</el-link>和
+            <el-link type="primary">隐私条款</el-link>
+          </el-form-item>
+          <el-form-item>
+            <el-button style="width:100%" type="primary" @click="loginClick">登录</el-button>
+          </el-form-item>
+          <el-form-item>
+            <el-button style="width:100%" type="primary" @click="register">注册</el-button>
+          </el-form-item>
+        </el-form>
       </div>
-      <el-form class="login-form" :model="loginForm" :rules="rules" ref="loginFormRef">
-        <el-form-item prop="phone">
-          <el-input prefix-icon="el-icon-user" placeholder="请输入手机号" v-model="loginForm.phone"></el-input>
-        </el-form-item>
-        <el-form-item prop="password">
-          <el-input
-            prefix-icon="el-icon-lock"
-            placeholder="请输入密码"
-            show-password
-            v-model="loginForm.password"
-          ></el-input>
-        </el-form-item>
-        <el-form-item prop="code">
-          <el-row :gutter="18">
-            <el-col :span="16">
-              <el-input prefix-icon="el-icon-key" placeholder="请输验证码" v-model="loginForm.code"></el-input>
-            </el-col>
-            <el-col :span="8">
-              <img class="captcha" :src="codeURL" @click="getCode" />
-            </el-col>
-          </el-row>
-        </el-form-item>
-        <el-form-item prop="isCheck">
-          <el-checkbox v-model="loginForm.isCheck"></el-checkbox>我已阅读并同意
-          <el-link type="primary">用户协议</el-link>和
-          <el-link type="primary">隐私条款</el-link>
-        </el-form-item>
-        <el-form-item>
-          <el-button style="width:100%" type="primary" @click="loginClick">登录</el-button>
-        </el-form-item>
-        <el-form-item>
-          <el-button style="width:100%" type="primary" @click="register">注册</el-button>
-        </el-form-item>
-      </el-form>
+      <div class="right">
+        <img src="@/assets/imgs/login_bg.png" alt />
+      </div>
+      <register ref="register"></register>
     </div>
-    <div class="right">
-      <img src="@/assets/imgs/login_bg.png" alt />
-    </div>
-    <register ref="register"></register>
   </div>
 </template>
 
@@ -139,7 +141,7 @@ export default {
         // });
         const res = await this.$axios.post("/login", this.loginForm);
         console.log(res);
-        
+
         if (res.data.code === 200) {
           //提示
           this.$message({
@@ -170,44 +172,48 @@ export default {
 </script>
 
 <style lang="less">
-.login-container {
+.box {
   height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  background: linear-gradient(225deg, #1493fa, #01c6fa);
-  .left {
-    width: 478px;
-    height: 550px;
-    background: #f5f5f5;
-    padding: 48px;
-    .title-box {
-      display: flex;
-      align-items: center;
-      img {
-        width: 22px;
-        height: 17px;
-        margin-right: 16px;
+
+  .login-container {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    background: linear-gradient(225deg, #1493fa, #01c6fa);
+    .left {
+      width: 478px;
+      height: 550px;
+      background: #f5f5f5;
+      padding: 48px;
+      .title-box {
+        display: flex;
+        align-items: center;
+        img {
+          width: 22px;
+          height: 17px;
+          margin-right: 16px;
+        }
+        .title {
+          font-size: 24px;
+          margin-right: 14px;
+        }
+        .line {
+          width: 1px;
+          background-color: #c7c7c7;
+          height: 27px;
+          margin-right: 12px;
+        }
+        .sub-title {
+          font-size: 22px;
+        }
       }
-      .title {
-        font-size: 24px;
-        margin-right: 14px;
-      }
-      .line {
-        width: 1px;
-        background-color: #c7c7c7;
-        height: 27px;
-        margin-right: 12px;
-      }
-      .sub-title {
-        font-size: 22px;
-      }
-    }
-    .login-form {
-      margin-top: 29px;
-      .captcha {
-        width: 100%;
-        height: 40px;
+      .login-form {
+        margin-top: 29px;
+        .captcha {
+          width: 100%;
+          height: 40px;
+        }
       }
     }
   }
