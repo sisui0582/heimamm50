@@ -1,6 +1,11 @@
 <template>
   <div>
-      学科列表
+      <el-card shadow="always">
+      总是显示
+    </el-card>
+    <el-card shadow="always">
+      总是显示
+    </el-card>
   </div>
 </template>
 

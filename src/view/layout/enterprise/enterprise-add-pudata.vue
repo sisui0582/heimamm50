@@ -53,6 +53,13 @@ export default {
       }
     };
   },
+  watch: {
+    dialogVisible(newValue){
+      console.log(newValue);
+      if(!newValue)
+      this.$refs.editFormRef.clearValidate();
+    }
+  },
   methods: {
     //新增
     submit() {

@@ -10,6 +10,9 @@ import enterprise from '@/view/layout/enterprise/enterprise'
 import question from '@/view/layout/question/question'
 import subject from '@/view/layout/subject/subject'
 
+//以下测试
+import Sloe3 from "@/test/sloe3/index"
+
 Vue.use(VueRouter)
 //导入 token (按需导入)
 import {getToken} from '../utils/token'
@@ -25,6 +28,8 @@ const router = new VueRouter({
             {path:'question',component:question},
             {path:'subject',component:subject}
         ]},
+        //以下面测试
+        { path: "/sloe3",component: Sloe3},
     ]
 })
 //全局导航首位

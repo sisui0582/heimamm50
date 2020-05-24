@@ -181,18 +181,26 @@ export default {
       },
       this.$refs.enterpriseEdit.dialogVisible = true;
       this.$refs.enterpriseEdit.mode = "add";
-      this.$nextTick(() => {
-        this.$refs.enterpriseEdit.$refs.editFormRef.clearValidate();
-      });
+      // this.$nextTick(() => {
+      //   this.$refs.enterpriseEdit.$refs.editFormRef.clearValidate();
+      // });
     },
     //编辑
     edmie(row){
+      const { id, eid, intro, name, short_name, remark } = row;
+      this.$refs.enterpriseEdit.editForm = {
+        id,
+        eid,
+        name,
+        short_name,
+        intro,
+        remark,
+      };
       this.$refs.enterpriseEdit.dialogVisible = true;
       this.$refs.enterpriseEdit.mode = "edit";
-      this.$refs.enterpriseEdit.editForm = {...row}
-      this.$nextTick(() => {
-        this.$refs.enterpriseEdit.$refs.editFormRef.clearValidate();
-      });
+      // this.$nextTick(() => {
+      //   this.$refs.enterpriseEdit.$refs.editFormRef.clearValidate();
+      // });
     }
   }
 };
