@@ -178,11 +178,19 @@ export default {
     },
     //编辑
     subjectEdit(row) {
-      this.$refs.addSubject.mode = "add";
+      this.$refs.addSubject.mode = "edit";
       this.$refs.addSubject.dialogVisible = true;
-      this.$refs.addSubject.editForm = {...row};
+      const { id, rid, name, short_name, intro, remark } = row;
+      this.$refs.addSubject.editForm = {
+        id, // 学科id
+        rid, // 学科编号
+        name, // 学科名称
+        short_name, // 学科简称
+        intro, // 学科简介
+        remark, // 备注
+      }
     }
-  }
+  } 
 };
 </script>
 
