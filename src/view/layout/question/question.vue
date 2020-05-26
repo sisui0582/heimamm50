@@ -6,7 +6,7 @@
           <el-col :span="6">
             <el-form-item label="学科" prop="subject">
               <template>
-                <el-select v-model="searchForm.subject" placeholder="请选择">
+                <el-select v-model="searchForm.subject" placeholder="请选择" style="width:150px">
                   <el-option
                     v-for="item in subjectList"
                     :key="item.id"
@@ -19,14 +19,14 @@
           </el-col>
           <el-col :span="6">
             <el-form-item label="阶段" prop="step">
-              <el-select v-model="searchForm.step" placeholder="请选择阶段">
+              <el-select v-model="searchForm.step" placeholder="请选择阶段" style="width:150px">
                 <el-option v-for="(value,name) in stepObj" :key="name" :label="value" :value="name"></el-option>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="企业" prop="enterprise">
-              <el-select v-model="searchForm.enterprise" placeholder="请选择企业">
+              <el-select v-model="searchForm.enterprise" placeholder="请选择企业" style="width:150px">
                 <el-option
                   v-for="item in enterpriseList"
                   :key="item.id"
@@ -38,7 +38,7 @@
           </el-col>
           <el-col :span="6">
             <el-form-item label="题型" prop="type">
-              <el-select v-model="searchForm.type" placeholder="请选择题型">
+              <el-select v-model="searchForm.type" placeholder="请选择题型" style="width:150px">
                 <el-option v-for="(value,name) in typeObj" :key="name" :label="value" :value="name"></el-option>
               </el-select>
             </el-form-item>
@@ -47,7 +47,7 @@
         <el-row>
           <el-col :span="6">
             <el-form-item label="难度" prop="difficulty">
-              <el-select v-model="searchForm.difficulty" placeholder="请选择难度">
+              <el-select v-model="searchForm.difficulty" placeholder="请选择难度" style="width:150px">
                 <el-option
                   v-for="(value,name) in difficultyObj"
                   :key="name"
@@ -59,13 +59,13 @@
           </el-col>
           <el-col :span="6">
             <el-form-item label="作者" prop="username">
-              <el-input v-model="searchForm.username"></el-input>
+              <el-input v-model="searchForm.username" style="width:150px"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="状态" prop="status">
               <template>
-                <el-select v-model="searchForm.status" placeholder="请选择状态">
+                <el-select v-model="searchForm.status" placeholder="请选择状态" style="width:150px">
                   <el-option label="禁用" :value="0"></el-option>
                   <el-option label="启用" :value="1"></el-option>
                 </el-select>
@@ -75,7 +75,12 @@
           <el-col :span="6">
             <el-form-item label="日期" prop="create_date">
               <template>
-                <el-date-picker v-model="searchForm.create_date" type="date" placeholder="选择日期"></el-date-picker>
+                <el-date-picker
+                  v-model="searchForm.create_date"
+                  type="date"
+                  placeholder="选择日期"
+                  style="width:150px"
+                ></el-date-picker>
               </template>
             </el-form-item>
           </el-col>
@@ -83,14 +88,14 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="标题" prop="title">
-              <el-input style="width:500px" v-model="searchForm.title"></el-input>
+              <el-input style="width:388px" v-model="searchForm.title"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item>
               <el-button @click="search" type="primary">搜索</el-button>
               <el-button @click="clear">清除</el-button>
-              <el-button type="primary">+新增</el-button>
+              <el-button @click="add" type="primary">+新增</el-button>
             </el-form-item>
           </el-col>
         </el-row>
@@ -100,24 +105,19 @@
       <template>
         <el-table :data="questionList" style="width: 100%" border>
           <el-table-column label="序号" type="index" width="80"></el-table-column>
-          <el-table-column label="题目">
+          <el-table-column label="题目" width="280">
             <template slot-scope="scope">
               <span v-html="scope.row.title"></span>
             </template>
           </el-table-column>
-          <el-table-column label="学科,阶段" prop="subject_name,step">
+          <el-table-column label="学科.阶段" prop="subject_name.step" width="100">
             <template slot-scope="scope">
-              {{scope.row.subject_name}}
-              <span v-if="scope.row.step === 1">,初级</span>
-              <span v-if="scope.row.step === 2">,中级</span>
-              <span v-if="scope.row.step === 3">,高级</span>
+              <span>{{scope.row.subject_name}}.{{stepObj[scope.row.step]}}</span>
             </template>
           </el-table-column>
           <el-table-column label="题型">
             <template slot-scope="scope">
-              <span v-if="scope.row.type === 1">单选</span>
-              <span v-if="scope.row.type === 2">多选</span>
-              <span v-if="scope.row.type === 3">简答</span>
+              <span>{{typeObj[scope.row.type]}}</span>
             </template>
           </el-table-column>
           <el-table-column label="企业" prop="enterprise_name"></el-table-column>
@@ -130,7 +130,7 @@
             </template>
           </el-table-column>
           <el-table-column label="访问量" prop="is_del"></el-table-column>
-          <el-table-column label="访问量" width="280">
+          <el-table-column label="操作" width="280">
             <template slot-scope="scope">
               <el-row>
                 <el-button type="primary">编辑</el-button>
@@ -144,12 +144,35 @@
           </el-table-column>
         </el-table>
       </template>
+      <div style="margin-top:15px;text-align:center">
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="page"
+          :page-sizes="[1, 2, 3, 4]"
+          :page-size="limit"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="total"
+        ></el-pagination>
+      </div>
     </el-card>
+    <questionAdd
+      ref="questionAdd"
+      :subjectList="subjectList"
+      :enterpriseList="enterpriseList"
+      :stepObj="stepObj"
+      :typeObj="typeObj"
+      :difficultyObj="difficultyObj"
+    ></questionAdd>
   </div>
 </template>
 
 <script>
+import questionAdd from "./question-add-or-pudate";
 export default {
+  components: {
+    questionAdd
+  },
   name: "Question",
   data() {
     return {
@@ -171,7 +194,7 @@ export default {
         title: "" //标题
       },
       page: 1, //页码
-      limit: 2, //每页显示的条数
+      limit: 1, //每页显示的条数
       questionList: [], //题库列表
       total: 0 //总条数
     };
@@ -220,6 +243,16 @@ export default {
       this.$refs.searchFormRef.resetFields();
       this.search();
     },
+    //每页多少条
+    handleSizeChange(val) {
+      this.limit = val;
+      this.search();
+    },
+    //当前页
+    handleCurrentChange(val) {
+      this.page = val;
+      this.getQuestionList();
+    },
     //删除
     remove(id, title) {
       this.$confirm(`确定删除${title}?`, "提示", {
@@ -253,6 +286,11 @@ export default {
         });
         this.getQuestionList();
       }
+    },
+    //新增
+    add() {
+      this.$refs.questionAdd.mode = "add";
+      this.$refs.questionAdd.dialogVisible = true;
     }
   }
 };
