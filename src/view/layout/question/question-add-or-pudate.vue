@@ -39,8 +39,9 @@
             <el-cascader
               size="large"
               :options="options"
-              :props="{ value: 'label' }"
+              :props="{value:'label'}"
               v-model="questionForm.city"
+              @change="handleChange"
             ></el-cascader>
         </el-form-item>
         <el-form-item label="题型" prop="type">
@@ -80,6 +81,7 @@ export default {
   },
   data() {
     return {
+      options: regionData,
       mode: "", // add 新增 edit 修改
       dialogVisible: false, // 控制dialog的显示及隐藏
       questionForm: {
@@ -104,7 +106,12 @@ export default {
         ]
       }
     };
-  }
+  },
+  methods: {
+    handleChange (value) {
+        console.log(value)
+      }
+  },
 };
 </script>
 

@@ -229,7 +229,7 @@ export default {
           ...this.searchForm
         }
       });
-      console.log(res);
+      //console.log(res);
       if (res.data.code === 200) {
         this.questionList = res.data.data.items;
         this.total = res.data.data.pagination.total;

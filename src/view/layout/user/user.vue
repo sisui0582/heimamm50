@@ -41,11 +41,15 @@
         <el-table-column label="操作" width="280">
           <template slot-scope="scope">
             <el-button @click="editUser(scope.row)" type="primary">编辑</el-button>
-            <el-button
+            <!-- <el-button
               @click="changeStatus(scope.row.id)"
               :type="scope.row.status === 0 ? 'success' : 'info'"
+            >{{scope.row.status === 0 ? "启用" : "禁用"}}</el-button> -->
+            <el-button
+              @click="changeStatus('/user/status',scope.row.id)"
+              :type="scope.row.status === 0 ? 'success' : 'info'"
             >{{scope.row.status === 0 ? "启用" : "禁用"}}</el-button>
-            <el-button @click="deleteUser(scope.row.id,scope.row.username)" type="default">删除</el-button>
+            <el-button @click="remove('/user/remove',scope.row.id)" type="default">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -68,7 +72,11 @@
 <script>
 //引入 user-or-update.vue子组件
 import UserEdit from "./user-add-or-pudate";
+import common from '@/mixins/common'
 export default {
+  mixins:[
+    common
+  ],
   components: {
     UserEdit
   },
@@ -127,38 +135,38 @@ export default {
       this.getUserListData();
     },
     //更改当前状态
-    async changeStatus(id) {
-      const res = await this.$axios.post("/user/status", { id });
-      //console.log(res);
-      if (res.data.code === 200) {
-        this.$message({
-          message: "更改状态成功~",
-          type: "success"
-        });
+    // async changeStatus(id) {
+    //   const res = await this.$axios.post("/user/status", { id });
+    //   //console.log(res);
+    //   if (res.data.code === 200) {
+    //     this.$message({
+    //       message: "更改状态成功~",
+    //       type: "success"
+    //     });
 
-        //重新查询
-        this.search();
-      }
-    },
-    deleteUser(id, username) {
-      this.$confirm(`确定删除 ${username} 该用户吗？`, "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      })
-        .then(async () => {
-          const res = await this.$axios.post("/user/remove", { id });
-          if (res.data.code === 200) {
-            this.$message({
-              message: "删除成功~",
-              type: "success"
-            });
-            // 重新查询
-            this.search();
-          }
-        })
-        .catch(() => {});
-    },
+    //     //重新查询
+    //     this.search();
+    //   }
+    // },
+    // deleteUser(id, username) {
+    //   this.$confirm(`确定删除 ${username} 该用户吗？`, "提示", {
+    //     confirmButtonText: "确定",
+    //     cancelButtonText: "取消",
+    //     type: "warning"
+    //   })
+    //     .then(async () => {
+    //       const res = await this.$axios.post("/user/remove", { id });
+    //       if (res.data.code === 200) {
+    //         this.$message({
+    //           message: "删除成功~",
+    //           type: "success"
+    //         });
+    //         // 重新查询
+    //         this.search();
+    //       }
+    //     })
+    //     .catch(() => {});
+    // },
     add() {
       //重置addForm
       this.$refs.userEditRef.addForm = {
