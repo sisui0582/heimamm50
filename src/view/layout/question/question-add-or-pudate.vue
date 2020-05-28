@@ -36,13 +36,13 @@
           </el-select>
         </el-form-item>
         <el-form-item label="城市" prop="city">
-            <el-cascader
-              size="large"
-              :options="options"
-              :props="{value:'label'}"
-              v-model="questionForm.city"
-              @change="handleChange"
-            ></el-cascader>
+          <el-cascader
+            size="large"
+            :options="options"
+            :props="{value:'label'}"
+            v-model="questionForm.city"
+            @change="handleChange"
+          ></el-cascader>
         </el-form-item>
         <el-form-item label="题型" prop="type">
           <template>
@@ -58,6 +58,23 @@
             </el-radio-group>
           </template>
         </el-form-item>
+        <hr class="hrMargin"/>
+        <el-form-item label="试题标题" class="setMargin" prop="title">
+          <quill-editor :options="{placeholder: '请输入答案标题...'}" v-model="questionForm.title"></quill-editor>
+        </el-form-item>
+        <el-form-item :label="typeObj[questionForm.type]">
+          <!-- 单选/多选/简答的子组件 -->
+          <questiontype :questionForm="questionForm"></questiontype>
+        </el-form-item>
+        <hr class="hrMargin" />
+        <el-form-item label="解析视频"></el-form-item>
+        <el-form-item label="答案解析" class="setMargin" prop="answer_analyze">
+          <quill-editor :options="{placeholder: '请输入答案解析...'}" v-model="questionForm.answer_analyze"></quill-editor>
+        </el-form-item>
+        <hr class="hrMargin" />
+        <el-form-item label="试题备注" prop="remark">
+           <el-input v-model="questionForm.remark"></el-input>
+        </el-form-item>
         <el-form-item>
           <el-button @click="dialogVisible = false">取 消</el-button>
           <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
@@ -69,6 +86,11 @@
 
 <script>
 import { regionData } from "element-china-area-data";
+import "quill/dist/quill.core.css";
+import "quill/dist/quill.snow.css";
+import "quill/dist/quill.bubble.css";
+import { quillEditor } from "vue-quill-editor";
+import questiontype from './questtion-type';
 export default {
   name: "QuestionEdit",
   //   props: ['subjectList','enterpriseList'],
@@ -78,6 +100,10 @@ export default {
     stepObj: Object,
     typeObj: Object,
     difficultyObj: Object
+  },
+  components: {
+    quillEditor,
+    questiontype
   },
   data() {
     return {
@@ -89,9 +115,37 @@ export default {
         subject: "", //学科
         step: "", //阶段
         enterprise: "", //企业
-        city:[],//城市
+        city: [], //城市
         type: "1", //题型
-        difficulty: "1" //难度
+        difficulty: "1", //难度
+        title: '', // 标题
+        single_select_answer: "", // 单选答案
+        multiple_select_answer: [], // 多选答案
+        short_answer: "", // 简答答案
+        answer_analyze: "", // 答案解析
+        remark: "", // 答案备注
+        select_options: [
+          {
+            label: "A",
+            text: "shift",
+            image: "",
+          },
+          {
+            label: "B",
+            text: "pop",
+            image: "",
+          },
+          {
+            label: "C",
+            text: "splice",
+            image: "",
+          },
+          {
+            label: "D",
+            text: "slice",
+            image: "",
+          },
+        ],
       },
       rules: {
         subject: [{ required: true, message: "请选择学科", trigger: "change" }],
@@ -99,19 +153,28 @@ export default {
         enterprise: [
           { required: true, message: "请选择企业", trigger: "change" }
         ],
-         city: [{ required: true, message: "请选择城市", trigger: "change" }],
+        city: [{ required: true, message: "请选择城市", trigger: "change" }],
         type: [{ required: true, message: "请选择题型", trigger: "change" }],
         difficulty: [
           { required: true, message: "请选择难度", trigger: "change" }
+        ],
+         title: [
+          { required: true, message: "标题不能为空", trigger: "change" }
+        ],
+        answer_analyze: [
+          { required: true, message: "答案解析不能为空", trigger: "change" }
+        ],
+        remark: [
+          { required: true, message: "答案备注不能为空", trigger: "blur" }
         ]
       }
     };
   },
   methods: {
-    handleChange (value) {
-        console.log(value)
-      }
-  },
+    handleChange(value) {
+      console.log(value);
+    }
+  }
 };
 </script>
 
@@ -136,6 +199,18 @@ export default {
   }
   .selectWidth {
     width: 300px;
+  }
+  .hrMargin {
+    margin-bottom: 20px;
+  }
+  .setMargin {
+    .el-form-item__content {
+      margin-left: 0px !important;
+      margin-top: 40px;
+    }
+  }
+  .ql-editor {
+    height: 100px;
   }
 }
 </style>
