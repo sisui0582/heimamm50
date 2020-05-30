@@ -9,11 +9,13 @@ Vue.config.productionTip = false
 import router from './router/index';
 //导入 element.js
 import '@/plugins/element.js';
+import store from '@/store/index.js'
 
 // 导入 request(封装了axios)
 import '@/utils/request.js'
 
 new Vue({
   render: h => h(App),
-  router
+  router,
+  store
 }).$mount('#app')

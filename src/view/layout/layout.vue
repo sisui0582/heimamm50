@@ -14,7 +14,25 @@
     </el-header>
     <el-container>
       <el-aside width="auto">
-        <el-menu router :default-active="defaultActive" class="el-menu-vertical-demo" :collapse="isCollapse">
+        <el-menu
+          router
+          :default-active="defaultActive"
+          class="el-menu-vertical-demo"
+          :collapse="isCollapse"
+        >
+          <el-menu-item
+            v-for="item in $router.options.routes[2].children"
+            :key="item.path"
+            :index="item.meta.fullPath"
+            v-show="item.meta.roles.includes($store.getters.getUserInfo.role)"
+          >
+            <i :class="item.meta.icon"></i>
+            <span slot="title">{{ item.meta.title }}</span>
+          </el-menu-item>
+          <!-- <el-menu-item index="/layout/welcome">
+            <i class="el-icon-pie-chart"></i>
+            <span slot="title">欢迎</span>
+          </el-menu-item>
           <el-menu-item index="/layout/chart">
             <i class="el-icon-pie-chart"></i>
             <span slot="title">数据预览</span>
@@ -34,7 +52,7 @@
           <el-menu-item index="/layout/subject">
             <i class="el-icon-notebook-2"></i>
             <span slot="title">学科列表</span>
-          </el-menu-item>
+          </el-menu-item>-->
         </el-menu>
       </el-aside>
       <el-main style="background-color:#e8e9ec;">
@@ -47,13 +65,13 @@
 <script>
 import { removeToken } from "@/utils/token";
 export default {
-  name:'layout',
+  name: "layout",
   data() {
     return {
       isCollapse: false, // 是否收起折叠菜单
       username: "", //用户名称
       avatar: "", //用户头像
-      defaultActive:"" //菜单是否选中
+      defaultActive: "" //菜单是否选中
     };
   },
   created() {
@@ -62,11 +80,16 @@ export default {
   },
   methods: {
     async getUserInfoData() {
-      const res = await this.$axios.get("/info",{});
+      const res = await this.$axios.get("/info", {});
       if (res.data.code === 200) {
         this.avatar = process.env.VUE_APP_BASEURL + "/" + res.data.data.avatar;
         this.username = res.data.data.username;
-      }else if(res.data.code === 206){}
+
+        //保存到仓库
+        //触发 mutations 方法
+        this.$store.commit("setUserInfo", res.data.data);
+      } else if (res.data.code === 206) {
+      }
     },
     // 退出
     logout() {

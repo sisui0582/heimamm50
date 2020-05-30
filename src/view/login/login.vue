@@ -153,7 +153,7 @@ export default {
           setToken(res.data.data.token);
 
           //跳转页面
-          this.$router.push("/layout");
+          this.$router.push("/layout/welcome");
         } else {
           this.$message.error(res.data.message);
           this.codeURL =
